@@ -1,0 +1,148 @@
+CREATE TABLE Course(CourseId int(4) NOT null Primary KEY,CourseName VARCHAR(20) ,Duration int(2),Fees int not NULL);
+
+
+CREATE TABLE Student(StudId int(4) NOT NULL Primary KEY ,FirstName VARCHAR(20) not null,LastName    VARCHAR(20),Street VARCHAR(20), 
+
+
+City VARCHAR(20)  not null,DOB DATE not Nsql_assignmentsql_assignmentULL);
+
+
+CREATE TABLE Registration(CourseId int(4) NOT null,StudId int(4) NOT null,DOJ DATE not NULL ,
+
+
+Primary Key(CourseId, StudId),Foreign KEY (CourseId) REFERENCES Course(CourseId),Foreign KEY (StudId) REFERENCES student(StudId));
+
+
+insert INTO Course values(1003,'Linux and C',3,4000.00 );
+insert INTO Course values(1004,'Oracle',2,3000.00);
+insert INTO Course values(1005,'Web',6,10000.00);
+
+
+INSERT INTO student VALUES(3003,'Bala','Krishnan','KPNagar','Chennai','03-JAN-1980');
+INSERT INTO student VALUES(3004,'Gowri','Shankar','AnnaNagar','Coimbatore','22-DEC-1977');
+INSERT INTO student VALUES(3005,'Priya','Menon','JPNagar','Cochin','12-FEB-1980');
+INSERT INTO student VALUES(3006,'Prem','Kumar', 'MGNagar','Coimbatore','17-MAY-1977');
+INSERT INTO student VALUES(3007,'Rahul','Dravid','KPNagar ,'Chennai','08-OCT-1977');
+INSERT INTO student VALUES(3008,'John','Dravid','MGColony','Chennai','15-SEP-1980');
+INSERT INTO student VALUES(3009,'Abdul','Raheem','JBNagar','Bangalore','19-JAN-1978');
+
+
+INSERT INTO registration VALUES(1002,3002,'1999-04-18');
+INSERT INTO registration VALUES(1003,3001,'1999-06-06');
+INSERT INTO registration VALUES(1004,3007,'1999-03-10');
+INSERT INTO registration VALUES(1005,3005,'1999-05-25');
+
+
+ALTER table student ADD age INT(3);
+
+ALTER TABLE course ADD CONSTRAINT d CHECK (fees !=0);
+
+SELECT floor(DATEDIFF(CURRENT_DATE, STR_TO_DATE(DOB, '%Y-%m-%d'))/365) as age 
+FROM student;
+
+UPDATE student SET age = floor(DATEDIFF(CURRENT_DATE, STR_TO_DATE(DOB, '%Y-%m-%d'))/365) WHERE studId = 3009; 
+
+UPDATE course SET Fees=Fees-500 WHERE Duration<=3;
+
+DELETE FROM student WHERE LastName ='David' AND City = 'Chennai';
+
+
+SELECT * FROM course;
+
+SELECT CONCAT(FIRSTName,LASTName) from student;
+
+SELECT * FROM course WHERE coursename = 'c++';
+
+
+SELECT * FROM course WHERE fees >=4000;
+
+SELECT * FROM course WHERE duration >=2 AND duration<= 4; 
+
+
+SELECT * FROM student WHERE DATE_FORMAT(dob,"%m") > '04' AND DATE_FORMAT(dob,"%m")<'09';
+
+SELECT * FROM course WHERE duration = 2 AND fees>3000;
+
+SELECT * FROM student WHERE studId IN (3002,3004,3005);
+
+SELECT * FROM student WHERE lastname= 'kumar';
+
+SELECT * FROM student WHERE street LIKE '%Nagar';
+
+SELECT * FROM student WHERE FIRSTname IN  ('dleep','Abdul');
+
+SELECT * FROM student WHERE age =(SELECT MAX(age) FROM student);
+
+SELECT * FROM student WHERE studid NOT IN (3004,3006);
+
+SELECT MAX(fees),MIN(fees), AVG(fees) FROM course ;
+
+select count(studid) from student;
+
+SELECT DISTINCT(city) FROM student;
+
+SELECT * FROM student ORDER BY dob DESC;
+
+SELECT * FROM student WHERE FIRSTName LIKE 'A%';
+
+SELECT * FROM student WHERE city = 'Bangalore' AND LastName='kumar'; 
+
+SELECT COUNT(doj) FROM registration WHERE doj = '1999-03-10';
+
+SELECT UPPER(firstname),LOWER(firstname) FROM student;
+
+SELECT RIGHT(firstname,3) from student;
+
+
+
+SELECT COUNT(studid) FROM registration GROUP BY courseId HAVING COUNT(courseId>1);
+
+SELECT studId FROM registration GROUP BY studId HAVING COUNT(courseId)>1;
+
+SELECT * FROM student WHERE LENGTH(firstname)=4;
+
+
+subquery:
+
+
+SELECT * FROM course WHERE fees NOT IN (SELECT MAX(fees) FROM course);
+
+
+SELECT * FROM student WHERE age > (SELECT age FROM student WHERE firstname='bala' AND lastname='krishnan');
+
+
+SELECT SUM(c.Fees) FROM course c 
+LEFT JOIN registration r ON c.CourseId=r.CourseId
+LEFT JOIN student s ON s.StudId = r.StudId WHERE s.City='banglore'; 
+
+
+SELECT c.CourseName,s.FirstName FROM course c 
+LEFT JOIN registration r ON c.CourseId=r.CourseId
+LEFT JOIN student s ON s.StudId = r.StudId; 
+
+
+SELECT CourseName, COUNT(Duration)
+FROM course
+GROUP BY Duration
+HAVING COUNT(Duration) > 1;
+
+SELECT coursename FROM course WHERE duration LIKE
+(SELECT Duration
+FROM course
+GROUP BY Duration
+HAVING COUNT(Duration) > 1);
+
+
+SELECT s.StudId,SUM(c.fees) FROM student s
+LEFT JOIN registration r ON r.Studid=s.StudId
+LEFT JOIN course c ON c.CourseId=r.CourseId
+GROUP BY (s.StudId);
+
+
+SELECT DATE_ADD(r.DOJ,INTERVAL c.Duration MONTH) FROM registration r
+LEFT JOIN course c ON c.CourseId=r.CourseId;
+
+SELECT s.StudId,SUM(c.fees) FROM student s
+LEFT JOIN registration r ON r.Studid=s.StudId
+LEFT JOIN course c ON c.CourseId=r.CourseId
+GROUP BY (s.StudId);

@@ -1,0 +1,37 @@
+mysql> 
+mysql> 
+-> 
+-> 
+-> 
+-> 
+-> 
+-> 
+-> 
+-> 
+-> 
+-> 
+-> 
+DELIMITER $$ 
+CREATE PROCEDURE list_name (INOUT name_list varchar(4eee)) 
+BEGIN 
+DECLARE is done INTEGER DEFAULT e; 
+DECLARE s_name varchar(lee) DEFAULT 
+DECLARE stud cursor CURSOR FOR 
+SELECT name FROM tablel; 
+DECLARE CONTINUE HANDLER 
+OPEN stud cursor; 
+get _ list: LOOP 
+FETCH stud cursor INTO s 
+IF is done = 1 THEN 
+LEAVE get _ list; 
+END IF; 
+SET name_list = CONCAT(s_ 
+END LOOP get _ list; 
+CLOSE stud cursor; 
+END$$ 
+Query 0K, e rows affected (e. 24 
+FOR NOT FOUND SET is done = 1 
+name ; 
+, " , name_list); 
+name 
+sec) 
